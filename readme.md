@@ -9,6 +9,9 @@ Visit the [Quick Tabs](https://chrome.google.com/extensions/detail/jnjfeinjfmenl
 How to install from the source code to see the effect of the changes?
 Go to More tools => extensions => enable developer mode => Load unpacked extension => and then choose the directory "Quicktabs"
 
+How to see the effect of changes to the code?
+As soon as the changes to the code the effect will be visible. Since the extension is taking its source files from the hard disk.
+
 # FEATURES
 
 * Lists all the open tabs in Chrome across all of your open windows
