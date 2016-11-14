@@ -6,6 +6,8 @@ Quick Tabs allows you to move quickly between recently used tabs without requiri
 
 Visit the [Quick Tabs](https://chrome.google.com/extensions/detail/jnjfeinjfmenlddahdjdmgpbokiacbbb) google extensions page to install this and try it out ...
 
+How to install from the source code to see the effect of the changes?
+Go to More tools => extensions => enable developer mode => Load unpacked extension => and then choose the directory "Quicktabs"
 
 # FEATURES
 
