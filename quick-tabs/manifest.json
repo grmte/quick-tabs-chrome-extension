@@ -4,7 +4,7 @@
   },
   "browser_action": {
     "default_icon": "assets/icon-32.png",
-    "default_title": "Quick Tabs",
+    "default_title": "SC Quick Tabs",
     "default_popup": "popup.html"
   },
   "description": "A keyboard centric most recently used (MRU) ordered tab list plugin with search and switch functionality inspired by IntelliJ IDEA",
@@ -18,9 +18,8 @@
   "name": "Quick Tabs",
   "options_page": "options.html",
   "permissions": [ "tabs", "bookmarks", "history" ],
-  "update_url": "http://clients2.google.com/service/update2/crx",
 
-  "version": "2016.9.20",
+  "version": "1",
 
   "commands": {
     "_execute_browser_action": {
