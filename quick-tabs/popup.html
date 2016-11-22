@@ -82,6 +82,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     {{/closedTabs}}
   {{/hasClosedTabs}}
 
+  {{#hasScemrTabs}}
+    <div class="separator big">
+      <span>SC EMR Searched Tabs</span>
+    </div>
+
+    {{#scemrTabs}}
+      <div class="item tab scemr" data-path="{{{templateUrlPath}}}">
+        <div class="{{tabImageStyle}}">
+          <img src="{{templateTabImage}}" width="16" height="16" border="0">
+        </div>
+        <div>
+          <div class="close" id="c{{id}}" title="{{closeTitle}}"></div>
+          <div class="title"{{#tips}} title="{{{templateTitle}}}"{{/tips}}>{{{templateTitle}}}</div>
+          {{#urls}}<div class="url">{{{templateUrl}}}</div>{{/urls}}
+        </div>
+      </div>
+    {{/scemrTabs}}
+  {{/hasScemrTabs}}
+
   {{#hasBookmarks}}
     <div class="separator big">
       <span>Bookmarks</span>

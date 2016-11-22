@@ -82,7 +82,7 @@ Timer.prototype.reset = function() {
  * timer to record page initialization events
  */
 var pageTimer = new Timer();
-
+var scemrTabs = [];
 /**
  * Log call that prepends the LOG_SRC before delegating to the background page to simplify debugging
  */
@@ -359,7 +359,8 @@ function drawCurrentTabs() {
     renderTabs({
       allTabs: bg.tabs.slice(1),
       closedTabs: bg.closedTabs,
-      bookmarks: []
+      bookmarks: [],
+      scemrTabs: []
     });
   });
 }
@@ -399,6 +400,39 @@ function renderTabs(params) {
     obj.templateUrl = encodeHTMLSource(obj.displayUrl);
     return obj;
   });
+  var scemrTabs = (params.scemrTabs || []).map(function(obj){
+    obj.templateTabImage = tabImage(obj);
+    obj.templateTitle = encodeHTMLSource(obj.title);
+    obj.templateUrl = encodeHTMLSource(obj.displayUrl || obj.url);
+    obj.templateUrlPath = encodeHTMLSource(obj.url);
+    return obj;
+  });
+
+  /**
+   *
+   *
+   active : false
+   audible : false
+   autoDiscardable : true
+   discarded : false
+   favIconUrl : "https://assets-cdn.github.com/favicon.ico"
+   height : 948
+   highlighted : false
+   id : 283
+   incognito : false
+   index : 4
+   mutedInfo : { pinned : false }
+   selected : false
+   status :  "complete"
+   templateTabImage  : "https://assets-cdn.github.com/favicon.ico"
+   templateTitle : "Auto insert script disabled and one new column added in events report by hemkanta-grmtech · Pull Request #388 · grmte&#47;sc-tech"
+   templateUrl : "https:&#47;&#47;github.com&#47;grmte&#47;sc-tech&#47;pull&#47;388#pullrequestreview-8392999"
+   title : "Auto insert script disabled and one new column added in events report by hemkanta-grmtech · Pull Request #388 · grmte/sc-tech"
+   url : "https://github.com/grmte/sc-tech/pull/388#pullrequestreview-8392999"
+   width : 1533
+   windowId : 241
+   *
+   */
 
   var context = {
     'type': params.type || "all",
@@ -406,13 +440,15 @@ function renderTabs(params) {
     'closedTabs': closedTabs,
     'bookmarks': bookmarks,
     'history': history,
+    'scemrTabs': scemrTabs,
     'closeTitle': "close tab (" + bg.getCloseTabKey().pattern() + ")",
     'tabImageStyle': bg.showFavicons() ? "tabimage" : "tabimage hideicon",
     'urlStyle': bg.showUrls() ? "" : "nourl",
     'urls': bg.showUrls(),
     'tips': bg.showTooltips(),
-    'noResults': allTabs.length == 0 && closedTabs.length == 0 && bookmarks.length == 0 && history.length == 0,
+    'noResults': allTabs.length == 0 && closedTabs.length == 0 && bookmarks.length == 0 && history.length == 0 && scemrTabs.length == 0,
     'hasClosedTabs': closedTabs.length > 0,
+    'hasScemrTabs': scemrTabs.length >= 0,
     'hasBookmarks': bookmarks.length > 0,
     'hasHistory': history.length > 0
   };
@@ -436,6 +472,10 @@ function renderTabs(params) {
   });
 
   $('.bookmark').on('click', function() {
+    // create a new tab for the window
+    openInNewTab(this.getAttribute('data-path'));
+  });
+  $('.scemr').on('click', function() {
     // create a new tab for the window
     openInNewTab(this.getAttribute('data-path'));
   });
@@ -539,6 +579,37 @@ function searchHistory(searchStr, since) {
   }
 }
 
+function searchScemrTabArray(searchStr, scemr) {
+  var arResult = [];
+  var xhr = new XMLHttpRequest();
+  var searchFor = encodeURI(searchStr);
+  xhr.open("GET", "https://www.savantcare.com/api/getAllUserForChrome?search="+searchFor, true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      // WARNING! Might be evaluating an evil script!
+      //var resp = eval("(" + xhr.responseText + ")");
+      var resp = JSON.parse(xhr.responseText);
+      var len = scemrTabs.length;
+      scemrTabs.splice(0,len);
+      resp.users.forEach(function(eachUser,idx){
+        scemrTabs.push({favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:eachUser.fullname,url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
+      })
+    }
+  }
+  xhr.send();
+  /*arResult = [
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Vikas Kedia",url:"https://www.savantcare.com/internal/#/user/440"},
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Vidushi Savant",url:"https://www.savantcare.com/internal/#/user/11"},
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Anirban Ghosh",url:"https://www.savantcare.com/internal/#/user/439"},
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Sonia Parikh",url:"https://www.savantcare.com/internal/#/user/10"},
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Christopher Sorensen",url:"https://www.savantcare.com/internal/#/user/1063"},
+    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Test Doctor",url:"https://www.savantcare.com/internal/#/user/5"}
+  ];*/
+
+  return scemrTabs;
+
+}
+
 /**
  * Retrieve the search string from the search box and search the different tab groups following these rules:
  *
@@ -562,12 +633,14 @@ function executeSearch() {
   // Filter!
   var filteredTabs = [];
   var filteredClosed = [];
+  var filteredScemr = [];
   var filteredBookmarks = [];
 
   if (searchStr.trim().length === 0) {
     // no need to search if the string is empty
     filteredTabs = bg.tabs;
     filteredClosed = bg.closedTabs;
+    //filteredScemr = bg.scemrTabs;
   } else if (searchStr === "<))") {
     filteredTabs = audibleSearch(searchStr, bg.tabs);
   } else if (startsWith(searchStr, "   ") || endsWith(searchStr, "   ")) {
@@ -583,6 +656,7 @@ function executeSearch() {
     if (startsWith(searchStr, " ") || endsWith(searchStr, " ") || resultCount < MIN_TAB_ONLY_RESULTS) {
       filteredBookmarks = searchTabArray(searchStr, bg.bookmarks);
     }
+    filteredScemr = searchScemrTabArray(searchStr, bg.scemrTabs);
   }
 
   pageTimer.log("search completed for '" + searchStr + "'");
@@ -591,6 +665,7 @@ function executeSearch() {
   renderTabs({
     allTabs: filteredTabs,
     closedTabs: filteredClosed,
+    scemrTabs: filteredScemr,
     bookmarks: filteredBookmarks.slice(0, MAX_NON_TAB_RESULTS)
   });
 }
@@ -630,6 +705,12 @@ function searchTabArray(searchStr, tabs) {
       var highlightedTitle = highlightSearch(search.exec(tab.title));
       var highlightedUrl = (bg.showUrls() || bg.searchUrls()) && highlightSearch(search.exec(tab.url));
       if(highlightedTitle || highlightedUrl){
+        var objSearch = {title: highlightedTitle || tab.title,
+            displayUrl: highlightedUrl || tab.url,
+            url: tab.url,
+            id: tab.id,
+            favIconUrl: tab.favIconUrl};
+        alert(objSearch);
         return {
           title: highlightedTitle || tab.title,
           displayUrl: highlightedUrl || tab.url,

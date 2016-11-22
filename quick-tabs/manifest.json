@@ -19,7 +19,7 @@
   "options_page": "options.html",
   "permissions": [ "tabs", "bookmarks", "history" ],
 
-  "version": "1",
+  "version": "1.2",
 
   "commands": {
     "_execute_browser_action": {
