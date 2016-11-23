@@ -408,32 +408,6 @@ function renderTabs(params) {
     return obj;
   });
 
-  /**
-   *
-   *
-   active : false
-   audible : false
-   autoDiscardable : true
-   discarded : false
-   favIconUrl : "https://assets-cdn.github.com/favicon.ico"
-   height : 948
-   highlighted : false
-   id : 283
-   incognito : false
-   index : 4
-   mutedInfo : { pinned : false }
-   selected : false
-   status :  "complete"
-   templateTabImage  : "https://assets-cdn.github.com/favicon.ico"
-   templateTitle : "Auto insert script disabled and one new column added in events report by hemkanta-grmtech · Pull Request #388 · grmte&#47;sc-tech"
-   templateUrl : "https:&#47;&#47;github.com&#47;grmte&#47;sc-tech&#47;pull&#47;388#pullrequestreview-8392999"
-   title : "Auto insert script disabled and one new column added in events report by hemkanta-grmtech · Pull Request #388 · grmte/sc-tech"
-   url : "https://github.com/grmte/sc-tech/pull/388#pullrequestreview-8392999"
-   width : 1533
-   windowId : 241
-   *
-   */
-
   var context = {
     'type': params.type || "all",
     'tabs': allTabs,
