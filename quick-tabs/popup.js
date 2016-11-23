@@ -476,8 +476,17 @@ function renderTabs(params) {
     openInNewTab(this.getAttribute('data-path'));
   });
   $('.scemr').on('click', function() {
-    // create a new tab for the window
-    openInNewTab(this.getAttribute('data-path'));
+    var curUrl=this.getAttribute('data-path');
+    var pos = bg.indexOfTabByUrl(bg.tabs,curUrl);
+    if(pos !== -1) {
+      // if already opened switch to it
+      bg.switchTabs(parseInt(bg.tabs[pos].id), function() {
+        closeWindow();
+      });
+    }else {
+      // create a new tab for the window
+      openInNewTab(this.getAttribute('data-path'));
+    }
   });
 
   $('.history').on('click', function() {
@@ -592,20 +601,11 @@ function searchScemrTabArray(searchStr, scemr) {
       var len = scemrTabs.length;
       scemrTabs.splice(0,len);
       resp.users.forEach(function(eachUser,idx){
-        scemrTabs.push({favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:eachUser.fullname,url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
+        scemrTabs.push({favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:eachUser.fullname,id:'sc'+eachUser.id, url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
       })
     }
   }
   xhr.send();
-  /*arResult = [
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Vikas Kedia",url:"https://www.savantcare.com/internal/#/user/440"},
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Vidushi Savant",url:"https://www.savantcare.com/internal/#/user/11"},
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Anirban Ghosh",url:"https://www.savantcare.com/internal/#/user/439"},
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Sonia Parikh",url:"https://www.savantcare.com/internal/#/user/10"},
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Christopher Sorensen",url:"https://www.savantcare.com/internal/#/user/1063"},
-    {favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:"Test Doctor",url:"https://www.savantcare.com/internal/#/user/5"}
-  ];*/
-
   return scemrTabs;
 
 }
@@ -706,10 +706,10 @@ function searchTabArray(searchStr, tabs) {
       var highlightedUrl = (bg.showUrls() || bg.searchUrls()) && highlightSearch(search.exec(tab.url));
       if(highlightedTitle || highlightedUrl){
         var objSearch = {title: highlightedTitle || tab.title,
-            displayUrl: highlightedUrl || tab.url,
-            url: tab.url,
-            id: tab.id,
-            favIconUrl: tab.favIconUrl};
+          displayUrl: highlightedUrl || tab.url,
+          url: tab.url,
+          id: tab.id,
+          favIconUrl: tab.favIconUrl};
         alert(objSearch);
         return {
           title: highlightedTitle || tab.title,
@@ -749,10 +749,10 @@ function endsWith(str, end) {
 // inserts '{' and '}' at start and end
 function highlightString(string, start, end){
   return string.substring(0,start)
-    + '{'
-    + string.substring(start, end+1)
-    + '}'
-    + string.substring(end+1);
+      + '{'
+      + string.substring(start, end+1)
+      + '}'
+      + string.substring(end+1);
 }
 
 // highlights Fuse results with the matches

@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </div>
 <div class="content" tabindex="2">
   <div id="content-list">
-  <!-- Tabs render here... -->
+    <!-- Tabs render here... -->
   </div>
 </div>
 
@@ -88,7 +88,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </div>
 
     {{#scemrTabs}}
-      <div class="item tab scemr" data-path="{{{templateUrlPath}}}">
+      <div class="item tab scemr" id="{{id}}" data-path="{{{templateUrlPath}}}">
         <div class="{{tabImageStyle}}">
           <img src="{{templateTabImage}}" width="16" height="16" border="0">
         </div>
@@ -146,4 +146,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <script type="text/javascript" src="popup.js"></script>
 </body>
 </html>
-
