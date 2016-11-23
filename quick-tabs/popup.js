@@ -563,7 +563,7 @@ function searchHistory(searchStr, since) {
 }
 
 function searchScemrTabArray(searchStr, scemr) {
-  var arResult = [];
+  var search = new RegExp(searchStr.trim(), 'i');
   var xhr = new XMLHttpRequest();
   var searchFor = encodeURI(searchStr);
   xhr.open("GET", "https://www.savantcare.com/api/getAllUserForChrome?search="+searchFor, true);
@@ -575,7 +575,8 @@ function searchScemrTabArray(searchStr, scemr) {
       var len = scemrTabs.length;
       scemrTabs.splice(0,len);
       resp.users.forEach(function(eachUser,idx){
-        scemrTabs.push({favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:eachUser.fullname,id:'sc'+eachUser.id, url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
+        var highlightedTitle = highlightSearch(search.exec(eachUser.fullname));
+        scemrTabs.push({favIconUrl:"https://www.savantcare.com/internal/app/images/favicon.ico",title:highlightedTitle || eachUser.fullname,id:'sc'+eachUser.id, url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
       })
     }
   }
