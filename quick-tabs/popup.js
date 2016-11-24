@@ -685,7 +685,6 @@ function searchTabArray(searchStr, tabs) {
           url: tab.url,
           id: tab.id,
           favIconUrl: tab.favIconUrl};
-        alert(objSearch);
         return {
           title: highlightedTitle || tab.title,
           displayUrl: highlightedUrl || tab.url,
