@@ -566,7 +566,7 @@ function searchScemrTabArray(searchStr, scemr) {
   var search = new RegExp(searchStr.trim(), 'i');
   var xhr = new XMLHttpRequest();
   var searchFor = encodeURI(searchStr);
-  xhr.open("GET", "https://www.savantcare.com/api/getAllUserForChrome?search="+searchFor, true);
+  xhr.open("GET", "https://www.savantcare.com/api/index.php/getAllUserForChrome?search="+searchFor, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       // WARNING! Might be evaluating an evil script!
