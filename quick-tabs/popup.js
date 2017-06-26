@@ -576,7 +576,7 @@ function searchScemrTabArray(searchStr, scemr) {
       scemrTabs.splice(0,len);
       resp.users.forEach(function(eachUser,idx){
         var highlightedTitle = highlightSearch(search.exec(eachUser.fullname));
-        scemrTabs.push({favIconUrl:"https://www.savantcare.com/u7/app/images/favicon.ico",title:highlightedTitle || eachUser.fullname,id:'sc'+eachUser.id, url:"https://www.savantcare.com/internal/#/user/"+eachUser.id})
+        scemrTabs.push({favIconUrl:"https://www.savantcare.com/u7/app/images/favicon.ico",title:highlightedTitle || eachUser.fullname,id:'sc'+eachUser.id, url:"https://www.savantcare.com/u7/#/"+eachUser.id})
       })
     }
   }
